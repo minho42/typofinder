@@ -14,7 +14,11 @@ from .utils import timeit
 
 GH_URL = "https://github.com"
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
-EXCLUDE_LIST = ["data/exclude_list.txt", "data/exclude_lorem_ipsum.txt"]
+EXCLUDE_LIST = [
+    "data/exclude_django.txt",
+    "data/exclude_list.txt",
+    "data/exclude_lorem_ipsum.txt",
+]
 
 WORD_MAX_LEN = 16
 COINED_WORD_MIN_LEN = 2
@@ -38,12 +42,14 @@ INCLUDE_EXTENSIONS = [
     "xhtml",
 ]
 EXCLUDE_FILES = [
-    "svnmap",
+    "svnmap", # cpython
     "requirements",
     "license",
     "authors",
 ]  # File names without extensions
 EXCLUDE_DIRS = [
+    "vendor", # django
+    "svntogit", # djangoproject
     "data",
     "bin",
     "env",
@@ -146,7 +152,7 @@ class TypoFinder(object):
             return path[: len(GH_URL)] == GH_URL
 
         def _is_github_repo_short(path: str) -> bool:
-            # gh: [username]/[repository] e.g. 'gh: minho42/typofinder'
+            # gh:[username]/[repository] e.g. 'gh:minho42/typofinder'
             gh_short = "gh:"
             return path[: len(gh_short)] == gh_short
 
@@ -353,7 +359,9 @@ class TypoFinder(object):
                     return True
 
             return False
-
+        
+        # if typo is also in exclude_list (=en_dictionary_list), it's not ignored as 
+        # '_is_typo_by_typo_list' find typo before '_is_not_typo_by_dictionary' igrnoe
         typo_conditions = [_is_typo_by_typo_list]
         not_typo_conditions = [
             _is_not_typo_by_wordnet,
