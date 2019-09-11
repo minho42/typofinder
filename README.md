@@ -17,7 +17,7 @@ $ pip install -r requirements.txt
 $ python __main__.py [GitHub repository]
 ```
 
-GitHub repository can be shortened e.g. `gh: minho42/typofinder`
+GitHub repository can be shortened e.g. `gh:minho42/typofinder`
 
 ## Output
 
