@@ -2,6 +2,8 @@
 
 Find possible typos from GitHub repository or local directory.
 
+![](https://github.com/minho42/typofinder/blob/master/screenshot.png)
+
 ## Requirement
 
 Python 3.6
