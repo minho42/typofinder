@@ -135,7 +135,6 @@ class TypoFinder(object):
                 try:
                     spinner.start()
                     try:
-                        # print(f"Cloning repo to [{repo_dir}]")
                         git.Repo.clone_from(self.path, repo_dir)
                         spinner.stop_and_persist(
                             symbol="", text=f"Repo cloned to [{repo_dir}]"
@@ -323,7 +322,6 @@ class TypoFinder(object):
 
         with counter.get_lock():
             counter.value += 1
-        # print(f"{counter.value}/{total}")
 
         sys.stdout.write(f"\r{counter.value}/{total}")
         sys.stdout.flush()
