@@ -1,8 +1,9 @@
 import os
 import re
+import sys
 import types
 from collections import defaultdict
-from multiprocessing import Pool
+from multiprocessing import Pool, Value
 from typing import Any, List, Union
 from urllib import parse
 
@@ -42,14 +43,14 @@ INCLUDE_EXTENSIONS = [
     "xhtml",
 ]
 EXCLUDE_FILES = [
-    "svnmap", # cpython
+    "svnmap",  # cpython
     "requirements",
     "license",
     "authors",
 ]  # File names without extensions
 EXCLUDE_DIRS = [
-    "vendor", # django
-    "svntogit", # djangoproject
+    "vendor",  # django
+    "svntogit",  # djangoproject
     "data",
     "bin",
     "env",
@@ -311,7 +312,6 @@ class TypoFinder(object):
             spinner.stop()
 
         _remove_words_endwith_xy()
-        print()
 
         # skipped_extensions = sorted(skipped_extensions, key=lambda k: k)
         # print(f"Skipped extensions/files: {skipped_extensions}")
@@ -320,6 +320,13 @@ class TypoFinder(object):
     def _get_word_if_typo(self, word: str) -> Union[str, None]:
         # To use multiprocessing.Pool.map, need to return back the given word if typo.
         # Return None if not typo.
+
+        with counter.get_lock():
+            counter.value += 1
+        # print(f"{counter.value}/{total}")
+
+        sys.stdout.write(f"\r{counter.value}/{total}")
+        sys.stdout.flush()
 
         word = word.lower()
 
@@ -359,8 +366,8 @@ class TypoFinder(object):
                     return True
 
             return False
-        
-        # if typo is also in exclude_list (=en_dictionary_list), it's not ignored as 
+
+        # if typo is also in exclude_list (=en_dictionary_list), it's not ignored as
         # '_is_typo_by_typo_list' find typo before '_is_not_typo_by_dictionary' igrnoe
         typo_conditions = [_is_typo_by_typo_list]
         not_typo_conditions = [
@@ -378,30 +385,30 @@ class TypoFinder(object):
         # It is a typo until proven otherwise for now
         return word
 
-    # @timeit
+    def init_global(self, c, t):
+        global counter
+        global total
+        counter = c
+        total = t
+
+    @timeit
     def find_typos(self) -> None:
         print(f"Collecting all words")
         collected_words = self._collect_all_words()
         print(f"{len(collected_words)} words collected")
 
         typos = []
+        counter = Value("i", 0)
+        total = Value("i", 0)
 
-        spinner = Halo(
-            text="Finding typos...",
-            text_color="magenta",
-            color="magenta",
-            spinner="dots",
-        )
-        try:
-            spinner.start()
-            with Pool() as pool:
-                typos = pool.map(self._get_word_if_typo, collected_words)
-                # Remove None values as _get_word_if_typo returns None if not typo
-                typos = [typo for typo in typos if typo]
-            spinner.stop_and_persist(text="Finding finished")
-        except (KeyboardInterrupt):
-            spinner.stop()
+        with Pool(
+            initializer=self.init_global, initargs=(counter, len(collected_words))
+        ) as pool:
+            typos = pool.map(self._get_word_if_typo, collected_words)
+            # Remove None values as _get_word_if_typo returns None if not typo
+            typos = [typo for typo in typos if typo]
 
+        print("\n--------------------")
         typos_to_print = []
         for word, count in sorted(collected_words.items()):
             # Highly likely typo
@@ -413,4 +420,3 @@ class TypoFinder(object):
 
         typos_to_print = sorted(typos_to_print, key=lambda k: k)
         [print(typo) for typo in typos_to_print]
-
