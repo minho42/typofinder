@@ -216,6 +216,9 @@ class TypoFinder(object):
                 or any(word in r[1] for r in HTML_ATTRIBUTE_SRC_RE.findall(line))
             )
 
+        def _is_test(word: str) -> bool:
+            return "test" in word
+
         ignore_conditions = [
             _is_out_of_length,
             _is_exist,
@@ -225,6 +228,7 @@ class TypoFinder(object):
             _is_url,
             _is_email,
             _is_html_attribute,
+            _is_test,
         ]
 
         if any([func(word) for func in ignore_conditions]):
