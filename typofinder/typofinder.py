@@ -383,7 +383,7 @@ class TypoFinder(object):
         # It is a typo until proven otherwise for now
         return word
 
-    def init_global(self, c, t):
+    def init_global(self, c, t) -> None:
         global counter
         global total
         counter = c
