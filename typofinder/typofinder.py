@@ -397,48 +397,46 @@ class TypoFinder(object):
         counter = c
         total = t
 
-    def _get_typos(self, collected_words: DefaultDict[str, int]) -> List[str]:
-        typos = []
-        counter = Value("i", 0)
-        total = Value("i", 0)
-
-        with Pool(
-            initializer=self._init_global, initargs=(counter, len(collected_words))
-        ) as pool:
-            typos = pool.map(self._get_word_if_typo, collected_words)
-            # Remove None values as _get_word_if_typo returns None if not typo
-            typos = [typo for typo in typos if typo]
-
-        print()
-        return typos
-
-    def _get_typos_to_print(
-        self, typos: List[str], collected_words: DefaultDict[str, int]
-    ) -> List[str]:
-        typos_to_print = []
-        for word, count in sorted(collected_words.items()):
-            # Highly likely typo
-            if f"*{word}" in typos:
-                typos_to_print.append(f"*{word}")
-            # Potential typo if occurs less frequently
-            elif word in typos and count <= OCCURRENCE_COUNT_LIMIT:
-                typos_to_print.append(f"{word}")
-
-        typos_to_print = sorted(typos_to_print, key=lambda k: k)
-        return typos_to_print
-
     @timeit
     def find(self) -> List[str]:
+        def _get_typos(collected_words: DefaultDict[str, int]) -> List[str]:
+            typos = []
+            counter = Value("i", 0)
+            total = Value("i", 0)
+
+            with Pool(
+                initializer=self._init_global, initargs=(counter, len(collected_words))
+            ) as pool:
+                typos = pool.map(self._get_word_if_typo, collected_words)
+                # Remove None values as _get_word_if_typo returns None if not typo
+                typos = [typo for typo in typos if typo]
+
+            print()
+            return typos
+
+        def _get_typos_to_print(
+            typos: List[str], collected_words: DefaultDict[str, int]
+        ) -> List[str]:
+            typos_to_print = []
+            for word, count in sorted(collected_words.items()):
+                # Highly likely typo
+                if f"*{word}" in typos:
+                    typos_to_print.append(f"*{word}")
+                # Potential typo if occurs less frequently
+                elif word in typos and count <= OCCURRENCE_COUNT_LIMIT:
+                    typos_to_print.append(f"{word}")
+
+            typos_to_print = sorted(typos_to_print, key=lambda k: k)
+            return typos_to_print
+
         print(f"Collecting all words")
         collected_words = self._collect_all_words()
         print(f"{len(collected_words)} words collected")
 
-        typos = self._get_typos(collected_words)
-        typos_to_print = self._get_typos_to_print(typos, collected_words)
+        typos = _get_typos(collected_words)
+        typos_to_print = _get_typos_to_print(typos, collected_words)
         return typos_to_print
 
     def print(self, typos: List[str]) -> None:
         print("--------------------")
         [print(typo) for typo in typos]
-
-    
