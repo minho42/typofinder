@@ -10,7 +10,8 @@ from .typofinder import TypoFinder
 @click.option("-m", "--min", default=6, help="Minimum length of word")
 def main(path, min):
     tf = TypoFinder(path=path, min_len=min)
-    tf.find_typos()
+    typos = tf.find()
+    tf.print(typos)
 
 
 if __name__ == "__main__":

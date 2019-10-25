@@ -4,7 +4,7 @@ import sys
 import types
 from collections import defaultdict
 from multiprocessing import Pool, Value
-from typing import Any, List, Union
+from typing import Any, DefaultDict, List, Union
 from urllib import parse
 
 import git
@@ -12,6 +12,10 @@ from halo import Halo
 from nltk.corpus import wordnet as wn
 
 from .utils import timeit
+
+
+counter = 0
+total = 0
 
 GH_URL = "https://github.com"
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
@@ -237,7 +241,7 @@ class TypoFinder(object):
         return True
 
     # @timeit
-    def _collect_all_words(self) -> List[str]:
+    def _collect_all_words(self) -> DefaultDict[str, int]:
         def _remove_words_endwith_xy() -> bool:
             # e.g. positionx, positiony,
             # Should be called after all words are collected
@@ -387,30 +391,30 @@ class TypoFinder(object):
         # It is a typo until proven otherwise for now
         return word
 
-    def init_global(self, c, t) -> None:
+    def _init_global(self, c, t) -> None:
         global counter
         global total
         counter = c
         total = t
 
-    @timeit
-    def find_typos(self) -> None:
-        print(f"Collecting all words")
-        collected_words = self._collect_all_words()
-        print(f"{len(collected_words)} words collected")
-
+    def _get_typos(self, collected_words: DefaultDict[str, int]) -> List[str]:
         typos = []
         counter = Value("i", 0)
         total = Value("i", 0)
 
         with Pool(
-            initializer=self.init_global, initargs=(counter, len(collected_words))
+            initializer=self._init_global, initargs=(counter, len(collected_words))
         ) as pool:
             typos = pool.map(self._get_word_if_typo, collected_words)
             # Remove None values as _get_word_if_typo returns None if not typo
             typos = [typo for typo in typos if typo]
 
-        print("\n--------------------")
+        print()
+        return typos
+
+    def _get_typos_to_print(
+        self, typos: List[str], collected_words: DefaultDict[str, int]
+    ) -> List[str]:
         typos_to_print = []
         for word, count in sorted(collected_words.items()):
             # Highly likely typo
@@ -421,4 +425,20 @@ class TypoFinder(object):
                 typos_to_print.append(f"{word}")
 
         typos_to_print = sorted(typos_to_print, key=lambda k: k)
-        [print(typo) for typo in typos_to_print]
+        return typos_to_print
+
+    @timeit
+    def find(self) -> List[str]:
+        print(f"Collecting all words")
+        collected_words = self._collect_all_words()
+        print(f"{len(collected_words)} words collected")
+
+        typos = self._get_typos(collected_words)
+        typos_to_print = self._get_typos_to_print(typos, collected_words)
+        return typos_to_print
+
+    def print(self, typos: List[str]) -> None:
+        print("--------------------")
+        [print(typo) for typo in typos]
+
+    
