@@ -31,20 +31,22 @@ OCCURRENCE_COUNT_LIMIT = 3
 # Need to use lowercase for file names and directories
 CLONED_REPO_DIR = "cloned_repos"
 INCLUDE_EXTENSIONS = [
-    "c",
-    "cxx",
-    "h",
+    # "c",
+    # "cxx",
+    # "h",
     "htm",
     "html",
-    "js",
-    "py",
+    # "js",
+    # "py",
     "readme",
     "rst",
     "rtf",
-    "sh",
-    "ts",
+    # "sh",
+    # "ts",
     "txt",
-    "xhtml",
+    # "xhtml",
+    "yaml",
+    "yml",
 ]
 EXCLUDE_FILES = [
     "svnmap",  # cpython
