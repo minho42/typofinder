@@ -34,6 +34,7 @@ asyncio
 asyncore
 atomicwrites
 attrs
+autocrlf
 awscli
 babel
 babelrc
@@ -46,6 +47,7 @@ boto
 boto3
 botocore
 breakpoint
+browserify
 builtin
 builtins
 bytearray
@@ -195,6 +197,7 @@ nocover
 numpy
 oauth2client
 oauthlib
+openjdk
 pandas
 paramiko
 pbr
@@ -273,6 +276,7 @@ util
 utils
 uuid
 venv
+vercel
 virtualenv
 vscode
 wcwidth
