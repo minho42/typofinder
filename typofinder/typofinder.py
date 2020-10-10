@@ -4,7 +4,7 @@ import sys
 import types
 from collections import defaultdict
 from multiprocessing import Pool, Value
-from typing import Any, DefaultDict, List, Union
+from typing import Any, DefaultDict, Dict, List, Union
 from urllib import parse
 
 import git
@@ -12,7 +12,6 @@ from halo import Halo
 from nltk.corpus import wordnet as wn
 
 from .utils import timeit
-
 
 counter = 0
 total = 0
@@ -49,12 +48,15 @@ INCLUDE_EXTENSIONS = [
     "yml",
 ]
 EXCLUDE_FILES = [
+    "lorem_ipsum.py", # django
     "svnmap",  # cpython
     "requirements",
     "license",
     "authors",
 ]  # File names without extensions
 EXCLUDE_DIRS = [
+    "test",
+    "tests",
     "vendor",  # django
     "svntogit",  # djangoproject
     "data",
@@ -69,8 +71,6 @@ EXCLUDE_DIRS = [
     "static",
 ]
 
-
-GITHUB_REPO_NAME_RE = re.compile(r"http[s]://.*/([\w-]+)")
 CONSECUTIVE_CHARS_RE = re.compile(r"(([A-Za-z])\2{3,})")  # e.g. 'aaaa', 'loooong',
 URL_RE = re.compile(r"(?:http[s]?|HTTP[S]?)://([\w.\-/:=%&+?]+)")
 EMAIL_RE = re.compile(r"[\w.-]+@.*\.[\w.-]+")
@@ -81,17 +81,26 @@ HTML_ATTRIBUTE_SRC_RE = re.compile(r"<[\w.-]+.*src\s{0,}=\s{0,}([\'\"])(.+?)\1")
 
 
 class TypoFinder(object):
+    def trim_trailing_slash(self, path: str) -> str:
+        if path.endswith("/"):
+            path = path[:-1]
+        if len(path) <= 0:
+            raise
+        return path
+
     def __init__(self, path: str, min_len: int = 6) -> None:
         if min_len < 6:
             min_len = 6
 
         assert WORD_MAX_LEN > min_len
 
-        self.path = path
+        self.path = self.trim_trailing_slash(path)
+        self.original_path = self.path
         self.min_len = min_len
         self.all_words = defaultdict(int)
         self.typo_list = set()
         self.en_dictionary_list = set()
+        self.repo_name = os.path.basename(self.path)
 
         def _load_typo() -> None:
             name = "data/typo_list.txt"
@@ -117,17 +126,8 @@ class TypoFinder(object):
             _load_en_dictionary()
             _load_exclude_list()
 
-        def _get_repo_name(path: str) -> str:
-            # TODO doesn't need to use regex
-            # change to use rsplit/rpartition after removing trailing '/'
-            try:
-                return GITHUB_REPO_NAME_RE.findall(path)[0]
-            except IndexError:
-                print("Cannot get repo name. Check out the path.")
-
         def _git_clone_repo() -> None:
-            repo_name = _get_repo_name(self.path)
-            repo_dir = os.path.join(BASE_DIR, f"{CLONED_REPO_DIR}/{repo_name}")
+            repo_dir = os.path.join(BASE_DIR, f"{CLONED_REPO_DIR}/{self.repo_name}")
 
             if os.path.exists(repo_dir):
                 print("Repo already exists. Proceed without cloning.")
@@ -442,3 +442,4 @@ class TypoFinder(object):
     def print(self, typos: List[str]) -> None:
         print("--------------------")
         [print(typo) for typo in typos]
+
