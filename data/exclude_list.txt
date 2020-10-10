@@ -266,6 +266,7 @@ swapcase
 tornado
 tqdm
 travisci
+unserializable
 url
 urllib3
 urlunparse
