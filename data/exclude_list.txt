@@ -166,6 +166,7 @@ js
 json
 jsonschema
 jupyter
+kubernetes
 kwargs
 ljust
 localhost
@@ -262,7 +263,10 @@ sqlite
 ssl
 startswith
 staticmethod
+supervisorctl
+supervisord
 swapcase
+systemd
 tornado
 tqdm
 travisci
