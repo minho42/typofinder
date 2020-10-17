@@ -1,4 +1,5 @@
 import time
+import datetime
 from functools import wraps
 
 
@@ -12,4 +13,8 @@ def timeit(func):
         return result
 
     return closure
+
+
+def today_Ymd() -> str:
+    return datetime.datetime.today().strftime("%Y%m%d")
 

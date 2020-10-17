@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang>
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Report created by TypoFinder" />
+  <link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
+  <title>{{ title }}</title>
+</head>
+
+<body>
+  <div id="root" class="container px-4">
+    <h1 class="py-3">
+      {{ typos|length }} possible typos found for <span class="bg-gray-200 rounded-md p-1">{{ repo_name }}</span>
+    </h1>
+
+    <ul>
+      {% if typos %}
+      {% for typo in typos %}
+      <li>
+        <div class="pb-1">
+          <div>
+            <span class="text-gray-600 pr-1">{{ loop.index }}. </span>
+            <span class="{% if '*' in typo.name %}bg-orange-200{% else %}{% endif %}">{{typo.name}}</span>
+          </div>
+
+          {% for file in typo.files %}
+          <div>
+            {{ file.name }}
+          </div>
+          <div>
+            <!-- <pre style="position: relative; display: block; padding: 0.5em; margin-top: 0.5em; margin-bottom: 0.5em; overflow-x: auto; white-space: pre-wrap; border-radius: 0.25rem; background-color: rgba(206, 17, 38, 0.05);"> -->
+            <pre
+              style="position: relative; display: block; padding: 0.5em; margin-top: 0.5em; margin-bottom: 0.5em; overflow-x: auto; white-space: pre-wrap; border-radius: 0.25rem; background-color: rgba(251,245,180, 0.3);">
+                  <code style="font-family: Consolas, Menlo, monospace;">
+                      {% for line in file.lines %}  
+                      {% if line.includes_typo %}<span data-ansi-line="true" style="background-color: rgb(251, 245, 180);"><span style="color: #881280;">&gt;</span><span style="color: #333333;"> {{ line.number.rjust(4) }} | </span><span>{{ line.content }}</span></span>{% else %}<span data-ansi-line="true">&nbsp;<span style="color: #333333;"> {{ line.number.rjust(4) }} | </span><span>{{ line.content }}</span></span>{% endif %}{% endfor %}
+                  </code>
+                </pre>
+          </div>
+          {% endfor %}
+
+        </div>
+        {% endfor %}
+      </li>
+      {% else %}
+      <div>No typos</div>
+      {% endif %}
+    </ul>
+
+  </div>
+
+</html>

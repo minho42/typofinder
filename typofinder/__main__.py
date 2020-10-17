@@ -2,6 +2,7 @@ import sys
 
 import click
 
+from .reporter import Reporter
 from .typofinder import TypoFinder
 
 
@@ -11,7 +12,10 @@ from .typofinder import TypoFinder
 def main(path, min):
     tf = TypoFinder(path=path, min_len=min)
     typos = tf.find()
-    tf.print(typos)
+    # tf.print(typos)
+
+    rpt = Reporter(repo_name=tf.repo_name, typos=typos)
+    rpt.generate_report()
 
 
 if __name__ == "__main__":

@@ -1,5 +1,6 @@
 Click
 GitPython
 halo
+Jinja2
 nltk
 pytest
