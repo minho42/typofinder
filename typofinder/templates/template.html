@@ -12,7 +12,7 @@
 <body>
   <div id="root" class="container px-4">
     <h1 class="py-3">
-      {{ typos|length }} possible typos found for <span class="bg-gray-200 rounded-md p-1">{{ repo_name }}</span>
+      {{ '0' if typos == None else typos|length }} possible typos found for <span class="bg-gray-200 rounded-md p-1">{{ repo_name }}</span>
     </h1>
 
     <ul>
