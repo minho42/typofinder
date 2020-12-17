@@ -3,7 +3,7 @@ from typing import List
 
 import jinja2
 
-from .utils import today_Ymd
+from utils import today_Ymd
 
 
 class Reporter(object):
@@ -21,9 +21,9 @@ class Reporter(object):
             return
         data = []
         for typo in self.typos:
-            data.append({'name': typo, 'files': []})
+            data.append({"name": typo, "files": []})
         # TODO need to find filename and linenumber -> add to data
-        # Sample data 
+        # Sample data
         # data = [
         #     {
         #         "name": self.typos[0],

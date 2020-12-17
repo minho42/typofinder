@@ -1,17 +1,18 @@
 import os
 import re
 import sys
-import types
 from collections import defaultdict
 from multiprocessing import Pool, Value
-from typing import Any, DefaultDict, Dict, List, Union
+from typing import DefaultDict, List, Union
 from urllib import parse
 
+import click
 import git
 from halo import Halo
 from nltk.corpus import wordnet as wn
 
-from .utils import timeit
+from reporter import Reporter
+from utils import timeit
 
 counter = 0
 total = 0
@@ -48,7 +49,7 @@ INCLUDE_EXTENSIONS = [
     "yml",
 ]
 EXCLUDE_FILES = [
-    "lorem_ipsum.py", # django
+    "lorem_ipsum.py",  # django
     "svnmap",  # cpython
     "requirements",
     "license",
@@ -130,12 +131,16 @@ class TypoFinder(object):
             repo_dir = os.path.join(BASE_DIR, f"{CLONED_REPO_DIR}/{self.repo_name}")
 
             if os.path.exists(repo_dir):
-                print("Repo already exists. Proceed without cloning.")
+                print(f"Repo already exists. Pulling [{repo_dir}]")
+                g = git.cmd.Git(repo_dir)
+                pulled = g.pull()
+                print(pulled)
+
             else:
                 spinner = Halo(
                     text=f"Cloning repo to [{repo_dir}]",
-                    text_color="cyan",
-                    color="cyan",
+                    text_color="green",
+                    color="green",
                     spinner="dots",
                 )
                 try:
@@ -274,7 +279,7 @@ class TypoFinder(object):
         skipped_extensions = []
         opened_file_count = 0
 
-        spinner = Halo(text_color="magenta", color="magenta", spinner="dots")
+        spinner = Halo(text_color="green", color="green", spinner="dots")
         try:
             spinner.start()
 
@@ -400,7 +405,7 @@ class TypoFinder(object):
         total = t
 
     @timeit
-    def find(self) -> List[str]:
+    def get(self) -> List[str]:
         def _get_typos(collected_words: DefaultDict[str, int]) -> List[str]:
             typos = []
             counter = Value("i", 0)
@@ -444,3 +449,19 @@ class TypoFinder(object):
         print("--------------------")
         [print(typo) for typo in typos]
 
+
+@click.command()
+@click.argument("path")
+@click.option("-m", "--min", default=6, help="Minimum length of word", type=int)
+@click.option("-r", "--report", default=False, help="Generate report", type=bool)
+def main(path, min, report):
+    tf = TypoFinder(path=path, min_len=min)
+    typos = tf.get()
+
+    if report:
+        rpt = Reporter(repo_name=tf.repo_name, typos=typos)
+        rpt.generate_report()
+
+
+if __name__ == "__main__":
+    main()
