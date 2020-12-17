@@ -17,7 +17,7 @@ setuptools.setup(
     url="https://github.com/minho42/typofinder",
     packages=setuptools.find_packages(),
     install_requires=install_requires,
-    entry_points={"console_scripts": ["tf=typofinder.__main__:main"]},
+    entry_points={"console_scripts": ["typofinder=typofinder:main"]},
     classifiers=[
         "Development Status :: 2 - Pre-Alpha",
         "Environment :: Console",
@@ -27,4 +27,3 @@ setuptools.setup(
         "Topic :: Text Processing",
     ],
 )
-

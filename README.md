@@ -53,7 +53,7 @@ nltk.download("wordnet")
 Finally, run the script
 
 ```
-python typofinder.py [GitHub repository] --min=8 --report=False
+python __main__.py [GitHub repository] --min=8 --report=False
 ```
 
 [GitHub repository] can be :

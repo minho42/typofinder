@@ -1,9 +1,8 @@
 import os
-from typing import List
 
 import jinja2
 
-from utils import today_Ymd
+from .utils import today_Ymd
 
 
 class Reporter(object):
