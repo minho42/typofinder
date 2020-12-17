@@ -30,19 +30,30 @@ Install required packages
 pip install -r requirements.txt
 ```
 
-Run the Python interpreter and download "wordnet". For more information, see [Installing NLTK Data](https://www.nltk.org/data.html)
+Run the Python interpreter and download "wordnet".
 
 ```
 python
->>> import nltk
->>> nltk.download("wordnet")
+```
+
+```
+import nltk
+import ssl
+
+try:
+    _create_unverified_https_context = ssl._create_unverified_context
+except AttributeError:
+    pass
+else:
+    ssl._create_default_https_context = _create_unverified_https_context
+
+nltk.download("wordnet")
 ```
 
 Finally, run the script
 
 ```
-python __main__.py [GitHub repository]
-python typofinder.py https://github.com/minho42/healthroster --min=11 --report=False
+python typofinder.py [GitHub repository] --min=8 --report=False
 ```
 
 [GitHub repository] can be :
@@ -50,6 +61,20 @@ python typofinder.py https://github.com/minho42/healthroster --min=11 --report=F
 1. Full repository URL e.g. `https://github.com/django/django`
 2. Shortened repository name e.g. `gh:django/django`
 3. or local directory e.g. `/Users/minho/projects/django`
+
+## Options
+```
+python typofinder.py --help
+```
+
+```
+Usage: typofinder.py [OPTIONS] PATH
+
+Options:
+  -m, --min INTEGER     Minimum length of word
+  -r, --report BOOLEAN  Generate report
+  --help                Show this message and exit.
+```
 
 ## Output
 
