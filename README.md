@@ -13,27 +13,27 @@ Python 3.6
 Copy the source code
 
 ```
-$ git clone https://github.com/minho42/typofinder.git
-$ cd typofinder/
+git clone https://github.com/minho42/typofinder.git
+cd typofinder/
 ```
 
 Optional: Use virtual environment
 
 ```
-$ python -m venv venv
-$ source venv/bin/activate
+python -m venv venv
+source venv/bin/activate
 ```
 
 Install required packages
 
 ```
-$ pip install -r requirements.txt
+pip install -r requirements.txt
 ```
 
 Run the Python interpreter and download "wordnet". For more information, see [Installing NLTK Data](https://www.nltk.org/data.html)
 
 ```
-$ python
+python
 >>> import nltk
 >>> nltk.download("wordnet")
 ```
@@ -41,7 +41,8 @@ $ python
 Finally, run the script
 
 ```
-$ python __main__.py [GitHub repository]
+python __main__.py [GitHub repository]
+python typofinder.py https://github.com/minho42/healthroster --min=11 --report=False
 ```
 
 [GitHub repository] can be :
