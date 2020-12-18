@@ -11,8 +11,7 @@ import git
 from halo import Halo
 from nltk.corpus import wordnet as wn
 
-from .reporter import Reporter
-from .utils import timeit
+from .utils import timeit, trim_trailing_slash
 
 counter = 0
 total = 0
@@ -82,20 +81,13 @@ HTML_ATTRIBUTE_SRC_RE = re.compile(r"<[\w.-]+.*src\s{0,}=\s{0,}([\'\"])(.+?)\1")
 
 
 class TypoFinder(object):
-    def trim_trailing_slash(self, path: str) -> str:
-        if path.endswith("/"):
-            path = path[:-1]
-        if len(path) <= 0:
-            raise
-        return path
-
     def __init__(self, path: str, min_len: int = 6) -> None:
         if min_len < 6:
             min_len = 6
 
         assert WORD_MAX_LEN > min_len
 
-        self.path = self.trim_trailing_slash(path)
+        self.path = trim_trailing_slash(path)
         self.original_path = self.path
         self.min_len = min_len
         self.all_words = defaultdict(int)

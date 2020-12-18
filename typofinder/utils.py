@@ -3,6 +3,14 @@ import datetime
 from functools import wraps
 
 
+def trim_trailing_slash(self, path: str) -> str:
+    if path.endswith("/"):
+        path = path[:-1]
+    if len(path) <= 0:
+        raise
+    return path
+
+
 def timeit(func):
     @wraps(func)
     def closure(*args, **kwargs):
@@ -17,4 +25,3 @@ def timeit(func):
 
 def today_Ymd() -> str:
     return datetime.datetime.today().strftime("%Y%m%d")
-
