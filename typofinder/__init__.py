@@ -1,1 +1,1 @@
-# from .typofinder import TypoFinder
+from .api import get
