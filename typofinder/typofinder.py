@@ -124,7 +124,8 @@ class TypoFinder(object):
             repo_dir = os.path.join(BASE_DIR, f"{CLONED_REPO_DIR}/{self.repo_name}")
 
             if os.path.exists(repo_dir):
-                print(f"Repo already exists. Pulling [{repo_dir}]")
+                print(f"Repo already exists.")
+                print(f"Trying: 'git pull [{repo_dir}]'")
                 g = git.cmd.Git(repo_dir)
                 pulled = g.pull()
                 print(pulled)
