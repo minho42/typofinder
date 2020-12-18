@@ -3,7 +3,7 @@ import datetime
 from functools import wraps
 
 
-def trim_trailing_slash(self, path: str) -> str:
+def trim_trailing_slash(path: str) -> str:
     if path.endswith("/"):
         path = path[:-1]
     if len(path) <= 0:
