@@ -38,6 +38,7 @@ INCLUDE_EXTENSIONS = [
     # "js",
     # "py",
     "readme",
+    "md",
     "rst",
     "rtf",
     # "sh",
