@@ -1,7 +1,6 @@
 from .typofinder import TypoFinder
 
 
-def get():
-    return ["t", "y", "p", "o", "s"]
-    # tf = TypoFinder()
-    # return tf.get()
+def get(repo, min_len, extensions, *args, **kwargs):
+    tf = TypoFinder(repo, min_len, extensions, *args, **kwargs)
+    return tf.get()
