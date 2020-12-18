@@ -83,14 +83,14 @@ HTML_ATTRIBUTE_SRC_RE = re.compile(r"<[\w.-]+.*src\s{0,}=\s{0,}([\'\"])(.+?)\1")
 
 class TypoFinder(object):
     def __init__(
-        self, path: str, min_len: int = 6, extensions: list = INCLUDE_EXTENSIONS
+        self, repo: str, min_len: int = 6, extensions: list = INCLUDE_EXTENSIONS
     ) -> None:
         if min_len < 6:
             min_len = 6
 
         assert WORD_MAX_LEN > min_len
 
-        self.path = trim_trailing_slash(path)
+        self.path = trim_trailing_slash(repo)
         self.original_path = self.path
         self.min_len = min_len
         self.extensions = extensions if extensions else INCLUDE_EXTENSIONS
@@ -402,7 +402,7 @@ class TypoFinder(object):
         total = t
 
     # TODO apply decorator conditionally?
-    @timeit
+    # @timeit
     def get(self) -> List[str]:
         def _get_typos(collected_words: DefaultDict[str, int]) -> List[str]:
             typos = []
