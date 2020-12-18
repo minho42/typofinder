@@ -82,7 +82,9 @@ HTML_ATTRIBUTE_SRC_RE = re.compile(r"<[\w.-]+.*src\s{0,}=\s{0,}([\'\"])(.+?)\1")
 
 
 class TypoFinder(object):
-    def __init__(self, path: str, min_len: int = 6) -> None:
+    def __init__(
+        self, path: str, min_len: int = 6, extensions: list = INCLUDE_EXTENSIONS
+    ) -> None:
         if min_len < 6:
             min_len = 6
 
@@ -91,6 +93,7 @@ class TypoFinder(object):
         self.path = trim_trailing_slash(path)
         self.original_path = self.path
         self.min_len = min_len
+        self.extensions = extensions if extensions else INCLUDE_EXTENSIONS
         self.all_words = defaultdict(int)
         self.typo_list = set()
         self.en_dictionary_list = set()
@@ -288,7 +291,7 @@ class TypoFinder(object):
 
                 for file in files:
                     file_ext = _get_filename_extension(file)
-                    if file_ext not in INCLUDE_EXTENSIONS:
+                    if file_ext not in self.extensions:
                         if file_ext not in skipped_extensions:
                             skipped_extensions.append(file_ext)
                         continue
@@ -398,6 +401,7 @@ class TypoFinder(object):
         counter = c
         total = t
 
+    # TODO apply decorator conditionally?
     @timeit
     def get(self) -> List[str]:
         def _get_typos(collected_words: DefaultDict[str, int]) -> List[str]:
