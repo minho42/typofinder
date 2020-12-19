@@ -13,27 +13,27 @@ Python 3.6
 Copy the source code
 
 ```
-git clone https://github.com/minho42/typofinder.git
-cd typofinder/
+$ git clone https://github.com/minho42/typofinder.git
+$ cd typofinder/
 ```
 
 Optional: Use virtual environment
 
 ```
-python -m venv venv
-source venv/bin/activate
+$ python -m venv venv
+$ source venv/bin/activate
 ```
 
 Install required packages
 
 ```
-pip install -r requirements.txt
+$ pip install -r requirements.txt
 ```
 
 Run the Python interpreter and download "wordnet".
 
 ```
-python
+$ python
 ```
 
 ```
@@ -53,7 +53,7 @@ nltk.download("wordnet")
 Finally, run the script
 
 ```
-python __main__.py [GitHub repository] --min=8 --report=False
+$ python __main__.py [GitHub repository] --min=8 --report=False
 ```
 
 [GitHub repository] can be :
@@ -64,16 +64,7 @@ python __main__.py [GitHub repository] --min=8 --report=False
 
 ## Options
 ```
-python typofinder.py --help
-```
-
-```
-Usage: typofinder.py [OPTIONS] PATH
-
-Options:
-  -m, --min INTEGER     Minimum length of word
-  -r, --report BOOLEAN  Generate report
-  --help                Show this message and exit.
+$ python __main__.py --help
 ```
 
 ## Output
