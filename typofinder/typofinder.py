@@ -442,7 +442,3 @@ class TypoFinder(object):
         typos_to_print = _get_typos_to_print(typos, collected_words)
         print(f"{len(typos_to_print)} possible typos found")
         return typos_to_print
-
-    def print(self, typos: List[str]) -> None:
-        print("--------------------")
-        [print(typo) for typo in typos]
