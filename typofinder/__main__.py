@@ -17,7 +17,7 @@ from .typofinder import TypoFinder
     multiple=True,
 )
 def main(path, min, report, extensions):
-    tf = TypoFinder(path=path, min_len=min, extensions=extensions)
+    tf = TypoFinder(repo=path, min_len=min, extensions=extensions)
     typos = tf.get()
 
     if report:
