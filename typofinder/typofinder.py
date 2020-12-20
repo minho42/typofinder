@@ -412,6 +412,7 @@ class TypoFinder(object):
             counter = Value("i", 0)
             total = Value("i", 0)
 
+            # TODO ?handle RuntimeError when running the typofinder.get() without __main__
             with Pool(
                 initializer=self._init_global, initargs=(counter, len(collected_words))
             ) as pool:
