@@ -156,13 +156,17 @@ class TypoFinder(object):
             # This should come at the below if block
             self.path = repo_dir
 
-        def _is_github_repo(path: str) -> bool:
+        def _is_github_repo_full(path: str) -> bool:
             return path[: len(GH_URL)] == GH_URL
 
         def _is_github_repo_short(path: str) -> bool:
             # gh:[username]/[repository] e.g. 'gh:minho42/typofinder'
             gh_short = "gh:"
             return path[: len(gh_short)] == gh_short
+
+        def _convert_to_full_gh_url(short):
+            short = short.replace("gh:", "")
+            return parse.urljoin(GH_URL, short)
 
         _load_all_data()
 
@@ -171,11 +175,7 @@ class TypoFinder(object):
         # 2. GitHub repository short 'gh:[username]/[repository]' e.g. 'gh:minho42/typofinder'
         # 3. Local directory e.g. '/Users/username/projects/myapp'
 
-        def _convert_to_full_gh_url(short):
-            short = short.replace("gh:", "")
-            return parse.urljoin(GH_URL, short)
-
-        if _is_github_repo(self.path):
+        if _is_github_repo_full(self.path):
             _git_clone_repo()
         elif _is_github_repo_short(self.path):
             self.path = _convert_to_full_gh_url(self.path)
