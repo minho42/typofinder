@@ -8,7 +8,7 @@ Find possible typos from GitHub repository or local directory.
 
 Python 3.6
 
-## Usage
+## Usage - command line
 
 Copy the source code
 
@@ -62,6 +62,18 @@ $ python __main__.py [GitHub repository] --min=8 --report=False
 2. Shortened repository name e.g. `gh:django/django`
 3. or local directory e.g. `/Users/minho/projects/django`
 
+
+## Usage - import
+```
+import typofinder
+
+# Needs to use within __main__ for now otherwise multiprocessing raises RuntimeError
+if __name__ == "__main__": 
+    typos = typofinder.get(
+        repo="REPOSITORY_HERE", min_len=6, extensions=["html", "md"]
+    )
+    print(typos)
+```
 ## Options
 ```
 $ python __main__.py --help
