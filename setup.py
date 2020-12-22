@@ -8,7 +8,7 @@ with open("requirements.txt") as file:
 
 setuptools.setup(
     name="typofinder",
-    version="0.0.2",
+    version="0.0.3",
     author="Min ho Kim",
     author_email="minho42@gmail.com",
     description="Find typos from GitHub repository",
