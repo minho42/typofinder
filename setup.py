@@ -8,7 +8,7 @@ with open("requirements.txt") as file:
 
 setuptools.setup(
     name="typofinder",
-    version="0.0.4",
+    version="0.0.5",
     author="Min ho Kim",
     author_email="minho42@gmail.com",
     description="Find typos from GitHub repository",
@@ -19,7 +19,7 @@ setuptools.setup(
     # py_modules=["typofinder"]
     packages=["typofinder"],
     package_dir={"typofinder": "typofinder"},
-    package_data={"data": ["*.txt"]},
+    package_data={"data": ["data/*.txt"]},
     scripts=["download_wordnet.py"],
     install_requires=install_requires,
     entry_points={"console_scripts": ["typofinder=typofinder:main"]},
