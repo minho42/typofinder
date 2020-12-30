@@ -1,4 +1,4 @@
-import setuptools
+from setuptools import setup, find_packages
 
 with open("README.md") as file:
     long_description = file.read()
@@ -6,7 +6,7 @@ with open("README.md") as file:
 with open("requirements.txt") as file:
     install_requires = [req.strip() for req in file.readlines()]
 
-setuptools.setup(
+setup(
     name="typofinder",
     version="0.0.7",
     description="Find typos from GitHub repository",
@@ -28,7 +28,7 @@ setuptools.setup(
     ],
     keywords="misspelling, grammar",
     package_dir={"": "typofinder"},
-    packages=["typofinder"],
+    packages=find_packages(where="typofinder"),
     install_requires=install_requires,
     package_data={"data": ["data/*"]},
     scripts=["download_wordnet.py"],
