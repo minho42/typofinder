@@ -19,6 +19,7 @@ setuptools.setup(
     # py_modules=["typofinder"]
     packages=["typofinder"],
     package_dir={"typofinder": "typofinder"},
+    include_package_data=True,
     package_data={"typofinder": ["data/*.txt"]},
     scripts=["download_wordnet.py"],
     install_requires=install_requires,
