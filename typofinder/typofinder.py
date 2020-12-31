@@ -180,8 +180,7 @@ class TypoFinder(object):
         elif _is_github_repo_short(self.path):
             self.path = _convert_to_full_gh_url(self.path)
             _git_clone_repo()
-
-        if not os.path.exists(self.path):
+        elif os.path.exists(self.path):
             print(f"Path not exist: {self.path}")
             raise OSError
 
