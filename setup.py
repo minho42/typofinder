@@ -8,7 +8,7 @@ with open("requirements.txt") as file:
 
 setup(
     name="typofinder",
-    version="0.0.7",
+    version="0.0.8",
     description="Find typos from GitHub repository",
     long_description=long_description,
     long_description_content_type="text/markdown",
