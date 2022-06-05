@@ -6,7 +6,6 @@ from multiprocessing import Pool, Value
 from typing import DefaultDict, List, Union
 from urllib import parse
 
-import click
 import git
 from halo import Halo
 from nltk.corpus import wordnet as wn
