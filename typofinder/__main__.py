@@ -8,7 +8,7 @@ from .typofinder import TypoFinder
 @click.command()
 @click.argument("path")
 @click.option("-m", "--min", default=6, help="Minimum length of word", type=int)
-@click.option("-r", "--report", default=False, help="Generate report", type=bool)
+@click.option("-r", "--report", default=True, help="Generate report", type=bool)
 @click.option(
     "-e",
     "--extensions",
