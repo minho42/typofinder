@@ -81,9 +81,7 @@ HTML_ATTRIBUTE_SRC_RE = re.compile(r"<[\w.-]+.*src\s{0,}=\s{0,}([\'\"])(.+?)\1")
 
 
 class TypoFinder(object):
-    def __init__(
-        self, repo: str, min_len: int = 6, extensions: list = INCLUDE_EXTENSIONS
-    ) -> None:
+    def __init__(self, repo: str, min_len: int = 6, extensions: list = INCLUDE_EXTENSIONS) -> None:
         if min_len < 6:
             min_len = 6
 
@@ -113,9 +111,7 @@ class TypoFinder(object):
         def _load_exclude_list() -> None:
             for name in EXCLUDE_LIST:
                 with open(os.path.join(BASE_DIR, name)) as file:
-                    self.en_dictionary_list.update(
-                        line.strip().lower() for line in file
-                    )
+                    self.en_dictionary_list.update(line.strip().lower() for line in file)
 
         def _load_all_data() -> None:
             _load_typo()
@@ -143,9 +139,7 @@ class TypoFinder(object):
                     spinner.start()
                     try:
                         git.Repo.clone_from(self.path, repo_dir)
-                        spinner.stop_and_persist(
-                            symbol="", text=f"Repo cloned to [{repo_dir}]"
-                        )
+                        spinner.stop_and_persist(symbol="", text=f"Repo cloned to [{repo_dir}]")
                     except git.GitCommandError:
                         print(f"git.GitCommandError: git.Repo.clone_from")
                         spinner.stop()
@@ -365,9 +359,7 @@ class TypoFinder(object):
                 return True
 
             matches = [
-                line
-                for line in self.en_dictionary_list
-                if len(line) >= COINED_WORD_MIN_LEN and word.startswith(line)
+                line for line in self.en_dictionary_list if len(line) >= COINED_WORD_MIN_LEN and word.startswith(line)
             ]
             # Try longer words first by reverse sorting
             # template.builtins instead of temp.late.built.in.s
@@ -411,9 +403,7 @@ class TypoFinder(object):
             total = Value("i", 0)
 
             # TODO ?handle RuntimeError when running the typofinder.get() without __main__
-            with Pool(
-                initializer=self._init_global, initargs=(counter, len(collected_words))
-            ) as pool:
+            with Pool(initializer=self._init_global, initargs=(counter, len(collected_words))) as pool:
                 typos = pool.map(self._get_word_if_typo, collected_words)
                 # Remove None values as _get_word_if_typo returns None if not typo
                 typos = [typo for typo in typos if typo]
@@ -421,9 +411,7 @@ class TypoFinder(object):
             print()
             return typos
 
-        def _get_typos_to_print(
-            typos: List[str], collected_words: DefaultDict[str, int]
-        ) -> List[str]:
+        def _get_typos_to_print(typos: List[str], collected_words: DefaultDict[str, int]) -> List[str]:
             typos_to_print = []
             for word, count in sorted(collected_words.items()):
                 # Highly likely typo
