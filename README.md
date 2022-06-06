@@ -30,30 +30,16 @@ Install required packages
 $ pip install -r requirements.txt
 ```
 
-Run the Python interpreter and download "wordnet".
+Run below script to download nltk "wordnet", etc.
 
 ```
-$ python
-```
-
-```
-import nltk
-import ssl
-
-try:
-    _create_unverified_https_context = ssl._create_unverified_context
-except AttributeError:
-    pass
-else:
-    ssl._create_default_https_context = _create_unverified_https_context
-
-nltk.download("wordnet")
+$ python download_wordnet.py
 ```
 
 Finally, run the script
 
 ```
-$ python __main__.py [GitHub repository] --min=8 --report=False
+$ python __main__.py [GitHub repository]
 ```
 
 [GitHub repository] can be :
@@ -65,6 +51,11 @@ $ python __main__.py [GitHub repository] --min=8 --report=False
 ## Options
 ```
 $ python __main__.py --help
+```
+
+Run with options
+```
+$ python __main__.py [GitHub repository] --min=8 --report=True
 ```
 
 ## Output
